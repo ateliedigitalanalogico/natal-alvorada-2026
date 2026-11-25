@@ -1,0 +1,172 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Natal Alvorada 2026</title>
+<style>
+  :root { --fundo: #000; --linha: #232323; --texto: #f1ece2; --apagado: #8d877d; --ouro: #d9a93a; }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--fundo); color: var(--texto); font: 400 16px/1.5 "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
+  .capa { padding: 72px 20px 40px; text-align: center; }
+  .capa h1 { font-weight: 300; font-size: clamp(28px, 6vw, 60px); letter-spacing: .22em; text-transform: uppercase; }
+  .capa p { margin-top: 12px; color: var(--apagado); letter-spacing: .3em; text-transform: uppercase; font-size: 12px; }
+  nav { position: sticky; top: 0; z-index: 5; background: rgba(0,0,0,.94); border-top: 1px solid var(--linha); border-bottom: 1px solid var(--linha); }
+  nav ul { display: flex; gap: 4px; list-style: none; overflow-x: auto; max-width: 1200px; margin: 0 auto; padding: 0 12px; }
+  nav a { display: block; padding: 14px 14px; color: var(--apagado); text-decoration: none; white-space: nowrap; font-size: 12px; letter-spacing: .18em; text-transform: uppercase; }
+  nav a:hover, nav a:focus-visible { color: var(--ouro); }
+  main { max-width: 1200px; margin: 0 auto; padding: 0 16px 80px; }
+  section { padding-top: 76px; scroll-margin-top: 20px; }
+  h2 { font-weight: 300; font-size: clamp(20px, 3.4vw, 30px); letter-spacing: .2em; text-transform: uppercase; margin-bottom: 18px; }
+  h2 span { color: var(--ouro); margin-right: .7em; }
+  video { display: block; width: 100%; aspect-ratio: 16 / 9; background: #050505; border: 1px solid var(--linha); }
+  .prints { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-top: 8px; }
+  .prints button { background: none; border: 1px solid var(--linha); cursor: zoom-in; padding: 0; color: var(--apagado); font: inherit; }
+  .prints button:hover, .prints button:focus-visible { border-color: var(--ouro); }
+  .prints img { display: block; width: 100%; aspect-ratio: 1328 / 874; object-fit: cover; }
+  .prints small { display: block; padding: 5px 0; font-size: 10px; letter-spacing: .2em; }
+  footer { text-align: center; color: var(--apagado); font-size: 11px; letter-spacing: .25em; text-transform: uppercase; padding: 30px 16px 50px; border-top: 1px solid var(--linha); }
+  .visor { position: fixed; inset: 0; z-index: 20; background: rgba(0,0,0,0); visibility: hidden; transition: background .35s ease, visibility 0s linear .35s; }
+  .visor.aberto { background: rgba(0,0,0,.94); visibility: visible; transition: background .35s ease; }
+  .visor img { position: absolute; transform-origin: top left; will-change: transform; border: 1px solid var(--linha); background: #000; }
+  .visor button { position: absolute; display: grid; place-items: center; width: 46px; height: 46px; border-radius: 50%; border: 1px solid rgba(241,236,226,.28); background: rgba(0,0,0,.55); color: var(--texto); cursor: pointer; opacity: 0; transition: opacity .25s ease, border-color .2s, color .2s; }
+  .visor.aberto button { opacity: 1; }
+  .visor button:hover, .visor button:focus-visible { border-color: var(--ouro); color: var(--ouro); }
+  .visor svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+  #fechar { top: 16px; right: 16px; }
+  .seta { top: 50%; margin-top: -23px; }
+  #anterior { left: 16px; }
+  #proxima { right: 16px; }
+  .legenda { position: absolute; left: 0; right: 0; bottom: 18px; text-align: center; color: var(--apagado); font-size: 11px; letter-spacing: .25em; text-transform: uppercase; pointer-events: none; opacity: 0; transition: opacity .25s ease; }
+  .visor.aberto .legenda { opacity: 1; }
+  body.travado { overflow: hidden; }
+  @media (prefers-reduced-motion: reduce) { .visor, .visor.aberto { transition: none; } }
+  @media (max-width: 760px) { .prints { grid-template-columns: repeat(2, 1fr); } .capa { padding-top: 48px; } section { padding-top: 56px; } }
+</style>
+</head>
+<body>
+<header class="capa">
+  <h1>Natal Alvorada 2026</h1>
+  <p>Projeção na tenda e na árvore de LED</p>
+</header>
+<nav><ul id="menu"></ul></nav>
+<main id="conteudos"></main>
+<footer>Natal Alvorada 2026</footer>
+
+<div class="visor" id="visor" role="dialog" aria-modal="true" aria-label="Imagem ampliada">
+  <img id="grande" alt="">
+  <button type="button" id="fechar" aria-label="Fechar"><svg viewBox="0 0 24 24"><path d="M5 5l14 14M19 5L5 19"/></svg></button>
+  <button type="button" class="seta" id="anterior" aria-label="Imagem anterior"><svg viewBox="0 0 24 24"><path d="M15 4l-8 8 8 8"/></svg></button>
+  <button type="button" class="seta" id="proxima" aria-label="Próxima imagem"><svg viewBox="0 0 24 24"><path d="M9 4l8 8-8 8"/></svg></button>
+  <div class="legenda" id="legenda"></div>
+</div>
+
+<script>
+const CONTEUDOS = [
+  ['A', 'Círculos', 'A_circulos'], ['B', 'Geométrico', 'B_geometrico'], ['C', 'Enfeites', 'C_esferas'], ['D', 'Mosaico', 'D_mosaico'],
+  ['E', 'Tropical', 'E_tropical'], ['F', 'Chita', 'F_chita'], ['G', 'Trama', 'G_trama'], ['H', 'Brasília', 'H_brasilia']
+];
+const fotos = [];
+const menu = document.getElementById('menu');
+const main = document.getElementById('conteudos');
+for (const [letra, nome, arq] of CONTEUDOS) {
+  menu.insertAdjacentHTML('beforeend', `<li><a href="#c${letra}">${letra} · ${nome}</a></li>`);
+  let miniaturas = '';
+  for (let cam = 1; cam <= 5; cam++) {
+    const i = fotos.push({ src: `imagens/${arq}_CAM${cam}.jpg`, legenda: `${nome} · Câmera ${cam}` }) - 1;
+    miniaturas += `<button type="button" data-foto="${i}"><img src="imagens/mini/${arq}_CAM${cam}.jpg" alt="${nome}, câmera ${cam}" loading="lazy"><small>CAM ${cam}</small></button>`;
+  }
+  main.insertAdjacentHTML('beforeend',
+    `<section id="c${letra}"><h2><span>${letra}</span>${nome}</h2>
+     <video controls preload="none" playsinline poster="imagens/${arq}_CAM1.jpg" src="videos/${arq}.mp4"></video>
+     <div class="prints">${miniaturas}</div></section>`);
+}
+const visor = document.getElementById('visor');
+const grande = document.getElementById('grande');
+const legenda = document.getElementById('legenda');
+let atual = 0, aberto = false;
+const PROPORCAO = 1328 / 874;
+const semMovimento = matchMedia('(prefers-reduced-motion: reduce)').matches;
+const dura = ms => semMovimento ? 0 : ms;
+
+// retangulo final da imagem ampliada, centralizada na tela (com respiro para as setas)
+function destino() {
+  const lado = innerWidth < 760 ? 10 : 84, alto = innerWidth < 760 ? 78 : 56;
+  let w = innerWidth - lado * 2, h = w / PROPORCAO;
+  if (h > innerHeight - alto * 2) { h = innerHeight - alto * 2; w = h * PROPORCAO; }
+  return { x: (innerWidth - w) / 2, y: (innerHeight - h) / 2, w, h };
+}
+function posiciona() {
+  const d = destino();
+  Object.assign(grande.style, { left: d.x + 'px', top: d.y + 'px', width: d.w + 'px', height: d.h + 'px' });
+  return d;
+}
+const miniDe = i => document.querySelector(`[data-foto="${i}"] img`);
+// transformacao que leva a imagem grande ate o lugar da miniatura
+function ate(el, d) {
+  const r = el.getBoundingClientRect();
+  return `translate(${r.left - d.x}px, ${r.top - d.y}px) scale(${r.width / d.w}, ${r.height / d.h})`;
+}
+function mostra(i) {
+  atual = (i + fotos.length) % fotos.length;
+  grande.src = fotos[atual].src;
+  grande.alt = fotos[atual].legenda;
+  legenda.textContent = fotos[atual].legenda;
+}
+function abre(i) {
+  aberto = true;
+  mostra(i);
+  grande.getAnimations().forEach(a => a.cancel());
+  const d = posiciona();
+  visor.classList.add('aberto');
+  document.body.classList.add('travado');
+  grande.animate([{ transform: ate(miniDe(i), d) }, { transform: 'none' }], { duration: dura(380), easing: 'cubic-bezier(.2,.8,.2,1)' });
+  document.getElementById('fechar').focus({ preventScroll: true });
+}
+function fecha() {
+  if (!aberto) return;
+  aberto = false;
+  const d = destino(), alvo = miniDe(atual);
+  visor.classList.remove('aberto');
+  document.body.classList.remove('travado');
+  const volta = grande.animate([{ transform: 'none', opacity: 1 }, { transform: ate(alvo, d), opacity: .2 }], { duration: dura(320), easing: 'cubic-bezier(.4,0,.2,1)', fill: 'forwards' });
+  volta.onfinish = () => { alvo.closest('button').focus({ preventScroll: true }); };
+}
+function passa(sentido) {
+  mostra(atual + sentido);
+  grande.animate([{ transform: `translateX(${sentido * 40}px)`, opacity: 0 }, { transform: 'none', opacity: 1 }], { duration: dura(260), easing: 'ease-out' });
+}
+document.addEventListener('click', e => {
+  const mini = e.target.closest('[data-foto]');
+  if (mini) abre(+mini.dataset.foto);
+});
+visor.addEventListener('click', e => {
+  if (e.target.closest('#anterior')) passa(-1);
+  else if (e.target.closest('#proxima')) passa(1);
+  else if (e.target !== grande) fecha();          // X ou qualquer clique fora da imagem
+});
+document.addEventListener('keydown', e => {
+  if (!aberto) return;
+  if (e.key === 'Escape') fecha();
+  if (e.key === 'ArrowRight') passa(1);
+  if (e.key === 'ArrowLeft') passa(-1);
+});
+addEventListener('resize', () => { if (aberto) posiciona(); });
+// deslizar o dedo no celular
+let toqueX = null;
+visor.addEventListener('touchstart', e => { toqueX = e.touches[0].clientX; }, { passive: true });
+visor.addEventListener('touchend', e => {
+  if (toqueX === null) return;
+  const dx = e.changedTouches[0].clientX - toqueX;
+  toqueX = null;
+  if (Math.abs(dx) > 50) passa(dx < 0 ? 1 : -1);
+}, { passive: true });
+// só um vídeo tocando por vez
+document.addEventListener('play', e => {
+  document.querySelectorAll('video').forEach(v => { if (v !== e.target) v.pause(); });
+}, true);
+</script>
+</body>
+</html>
