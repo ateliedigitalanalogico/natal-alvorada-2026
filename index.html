@@ -45,8 +45,10 @@
   .legenda { position: absolute; left: 0; right: 0; bottom: 18px; text-align: center; color: var(--apagado); font-size: 11px; letter-spacing: .25em; text-transform: uppercase; pointer-events: none; opacity: 0; transition: opacity .25s ease; }
   .visor.aberto .legenda { opacity: 1; }
   body.travado { overflow: hidden; }
+  @media (max-width: 760px) { .prints button:first-child { grid-column: 1 / -1; } .seta { top: auto; margin-top: 0; bottom: 52px; } #anterior { left: calc(50% - 62px); } #proxima { right: calc(50% - 62px); } }
   @media (prefers-reduced-motion: reduce) { .visor, .visor.aberto { transition: none; } }
-  @media (max-width: 760px) { .mosaico { grid-template-columns: repeat(4, 1fr); gap: 2px; padding: 0 4px 24px; } .mosaico span { display: none; } .prints { grid-template-columns: repeat(2, 1fr); } .capa { padding-top: 48px; } section { padding-top: 56px; } }
+  @media (max-width: 1024px) { .mosaico { grid-template-columns: repeat(4, 1fr); } }
+  @media (max-width: 760px) { .mosaico { gap: 2px; padding: 0 4px 24px; } .mosaico span { display: none; } .prints { grid-template-columns: repeat(2, 1fr); } .capa { padding-top: 48px; } section { padding-top: 56px; } }
 </style>
 </head>
 <body>
@@ -77,16 +79,25 @@ const fotos = [];
 const main = document.getElementById('conteudos');
 const mosaico = document.getElementById('mosaico');
 for (const [letra, nome, arq] of CONTEUDOS) {
-  mosaico.insertAdjacentHTML('beforeend', `<a href="#c${letra}"><img src="imagens/mosaico/${arq}.jpg" alt="${nome}, tenda vista de baixo"><span>${nome}</span></a>`);
+  mosaico.insertAdjacentHTML('beforeend', `<a href="#c${letra}"><img src="imagens/mosaico/${arq}.webp" width="400" height="400" fetchpriority="high" decoding="async" alt="${nome}, tenda vista de baixo"><span>${nome}</span></a>`);
   let miniaturas = '';
   for (let cam = 1; cam <= 5; cam++) {
     const i = fotos.push({ src: `imagens/${arq}_CAM${cam}.jpg`, legenda: `${nome} · Câmera ${cam}` }) - 1;
-    miniaturas += `<button type="button" data-foto="${i}"><img src="imagens/mini/${arq}_CAM${cam}.jpg" alt="${nome}, câmera ${cam}" loading="lazy"><small>CAM ${cam}</small></button>`;
+    miniaturas += `<button type="button" data-foto="${i}"><img src="imagens/mini/${arq}_CAM${cam}.jpg" width="480" height="316" alt="${nome}, câmera ${cam}" loading="lazy" decoding="async"><small>CAM ${cam}</small></button>`;
   }
   main.insertAdjacentHTML('beforeend',
     `<section id="c${letra}"><h2><span>${letra}</span>${nome}</h2>
-     <video controls preload="none" playsinline poster="imagens/${arq}_CAM1.jpg" src="videos/${arq}.mp4"></video>
+     <video controls preload="none" playsinline data-capa="imagens/capas/${arq}.webp" src="videos/${arq}.mp4"></video>
      <div class="prints">${miniaturas}</div></section>`);
+}
+const poeCapa = v => { v.poster = v.dataset.capa; };
+if ('IntersectionObserver' in window) {
+  const vigia = new IntersectionObserver(itens => itens.forEach(it => {
+    if (it.isIntersecting) { poeCapa(it.target); vigia.unobserve(it.target); }
+  }), { rootMargin: '500px 0px' });
+  document.querySelectorAll('video[data-capa]').forEach(v => vigia.observe(v));
+} else {
+  document.querySelectorAll('video[data-capa]').forEach(poeCapa);
 }
 const visor = document.getElementById('visor');
 const grande = document.getElementById('grande');
