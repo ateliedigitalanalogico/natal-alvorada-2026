@@ -22,6 +22,9 @@
   .mosaico a:focus-visible { box-shadow: 0 0 0 1px var(--ouro); }
   main { max-width: 1200px; margin: 0 auto; padding: 0 16px 80px; border-top: 1px solid var(--linha); }
   section { padding-top: 76px; scroll-margin-top: 20px; }
+  .serie { margin-top: 64px; padding-bottom: 12px; border-bottom: 1px solid var(--linha); color: var(--ouro); font-weight: 400; font-size: 12px; letter-spacing: .4em; text-transform: uppercase; text-align: center; }
+  .serie:first-child { margin-top: 36px; }
+  .serie + section { padding-top: 40px; }
   h2 { font-weight: 300; font-size: clamp(20px, 3.4vw, 30px); letter-spacing: .2em; text-transform: uppercase; margin-bottom: 18px; }
   h2 span { color: var(--ouro); margin-right: .7em; }
   video { display: block; width: 100%; aspect-ratio: 16 / 9; background: #050505; border: 1px solid var(--linha); }
@@ -75,19 +78,34 @@ const CONTEUDOS = [
   ['I', 'Estrela d’Alva', 'I_estrela_dalva'], ['J', 'Folia de Reis', 'J_folia_de_reis'], ['K', 'Modernista', 'K_modernista'], ['L', 'Revoada', 'L_revoada'],
   ['M', 'Ciranda', 'M_ciranda'], ['N', 'Bandeirinhas', 'N_bandeirinhas'], ['O', 'Tropicália', 'O_tropicalia'], ['P', 'Águas', 'P_aguas']
 ];
+// Série 2: vídeos e imagens ficam no segundo repositório (o Pages aceita cerca de 1 GB por site)
+const BASE2 = '/natal-alvorada-2026-serie2/';
+const SERIE2 = [
+  ['Frevo', '17_frevo'], ['Bumba Meu Boi', '18_bumba_meu_boi'], ['Maracatu', '19_maracatu'], ['Presépio de Barro', '20_presepio_de_barro'],
+  ['Reisado de Luz', '21_reisado_de_luz'], ['Praia de Natal', '22_praia_de_natal'], ['Cataventos', '23_cataventos'], ['Pipas', '24_pipas'],
+  ['Pelourinho', '25_pelourinho'], ['Bossa Natal', '26_bossa_natal'], ['Frutas do Brasil', '27_frutas_do_brasil'], ['Bichos em Família', '28_bichos_em_familia'],
+  ['Gravura em Cores', '29_gravura_em_cores'], ['Renda de Cores', '30_renda_de_cores'], ['Marajoara Pop', '31_marajoara_pop'], ['Fitinhas do Bonfim', '32_fitinhas_do_bonfim']
+];
+const TODOS = [
+  ...CONTEUDOS.map(([letra, nome, arq]) => ({ id: letra, letra, nome, arq, base: '' })),
+  ...SERIE2.map(([nome, arq]) => ({ id: arq.slice(0, 2), letra: '', nome, arq, base: BASE2 }))
+];
 const fotos = [];
 const main = document.getElementById('conteudos');
 const mosaico = document.getElementById('mosaico');
-for (const [letra, nome, arq] of CONTEUDOS) {
-  mosaico.insertAdjacentHTML('beforeend', `<a href="#c${letra}"><img src="imagens/mosaico/${arq}.webp" width="400" height="400" fetchpriority="high" decoding="async" alt="${nome}, tenda vista de baixo"><span>${nome}</span></a>`);
+for (const { id, letra, nome, arq, base } of TODOS) {
+  const naPrimeiraTela = base === '' ? 'fetchpriority="high"' : 'loading="lazy"';
+  mosaico.insertAdjacentHTML('beforeend', `<a href="#c${id}"><img src="${base}imagens/mosaico/${arq}.webp" width="400" height="400" ${naPrimeiraTela} decoding="async" alt="${nome}, tenda vista de baixo"><span>${nome}</span></a>`);
+  if (id === 'A') main.insertAdjacentHTML('beforeend', '<h3 class="serie">Série 1</h3>');
+  if (id === '17') main.insertAdjacentHTML('beforeend', '<h3 class="serie">Série 2</h3>');
   let miniaturas = '';
   for (let cam = 1; cam <= 5; cam++) {
-    const i = fotos.push({ src: `imagens/${arq}_CAM${cam}.jpg`, legenda: `${nome} · Câmera ${cam}` }) - 1;
-    miniaturas += `<button type="button" data-foto="${i}"><img src="imagens/mini/${arq}_CAM${cam}.jpg" width="480" height="316" alt="${nome}, câmera ${cam}" loading="lazy" decoding="async"><small>CAM ${cam}</small></button>`;
+    const i = fotos.push({ src: `${base}imagens/${arq}_CAM${cam}.jpg`, legenda: `${nome} · Câmera ${cam}` }) - 1;
+    miniaturas += `<button type="button" data-foto="${i}"><img src="${base}imagens/mini/${arq}_CAM${cam}.jpg" width="480" height="316" alt="${nome}, câmera ${cam}" loading="lazy" decoding="async"><small>CAM ${cam}</small></button>`;
   }
   main.insertAdjacentHTML('beforeend',
-    `<section id="c${letra}"><h2><span>${letra}</span>${nome}</h2>
-     <video controls preload="none" playsinline data-capa="imagens/capas/${arq}.webp" src="videos/${arq}.mp4"></video>
+    `<section id="c${id}"><h2>${letra ? `<span>${letra}</span>` : ''}${nome}</h2>
+     <video controls preload="none" playsinline data-capa="${base}imagens/capas/${arq}.webp" src="${base}videos/${arq}.mp4"></video>
      <div class="prints">${miniaturas}</div></section>`);
 }
 const poeCapa = v => { v.poster = v.dataset.capa; };
