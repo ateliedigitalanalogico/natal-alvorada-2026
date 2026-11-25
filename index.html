@@ -10,14 +10,17 @@
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html { scroll-behavior: smooth; }
   body { background: var(--fundo); color: var(--texto); font: 400 16px/1.5 "Segoe UI", Roboto, Helvetica, Arial, sans-serif; }
-  .capa { padding: 72px 20px 40px; text-align: center; }
+  .capa { padding: 56px 20px 28px; text-align: center; }
   .capa h1 { font-weight: 300; font-size: clamp(28px, 6vw, 60px); letter-spacing: .22em; text-transform: uppercase; }
   .capa p { margin-top: 12px; color: var(--apagado); letter-spacing: .3em; text-transform: uppercase; font-size: 12px; }
-  nav { position: sticky; top: 0; z-index: 5; background: rgba(0,0,0,.94); border-top: 1px solid var(--linha); border-bottom: 1px solid var(--linha); }
-  nav ul { display: flex; gap: 4px; list-style: none; overflow-x: auto; max-width: 1200px; margin: 0 auto; padding: 0 12px; }
-  nav a { display: block; padding: 14px 14px; color: var(--apagado); text-decoration: none; white-space: nowrap; font-size: 12px; letter-spacing: .18em; text-transform: uppercase; }
-  nav a:hover, nav a:focus-visible { color: var(--ouro); }
-  main { max-width: 1200px; margin: 0 auto; padding: 0 16px 80px; }
+  .mosaico { display: grid; grid-template-columns: repeat(8, 1fr); gap: 4px; max-width: 1600px; margin: 0 auto; padding: 0 12px 36px; }
+  .mosaico a { position: relative; display: block; aspect-ratio: 1; overflow: hidden; outline: none; }
+  .mosaico img { display: block; width: 100%; height: 100%; object-fit: cover; transition: transform .45s cubic-bezier(.2,.8,.2,1); }
+  .mosaico a:hover img, .mosaico a:focus-visible img { transform: scale(1.08); }
+  .mosaico span { position: absolute; inset: 0; display: grid; place-items: center; padding: 6px; text-align: center; font-size: 13px; line-height: 1.35; letter-spacing: .16em; text-transform: uppercase; color: var(--texto); text-shadow: 0 1px 6px #000; background: radial-gradient(circle, rgba(0,0,0,.78) 0%, rgba(0,0,0,.55) 45%, rgba(0,0,0,0) 72%); opacity: 0; transition: opacity .25s ease; }
+  .mosaico a:hover span, .mosaico a:focus-visible span { opacity: 1; }
+  .mosaico a:focus-visible { box-shadow: 0 0 0 1px var(--ouro); }
+  main { max-width: 1200px; margin: 0 auto; padding: 0 16px 80px; border-top: 1px solid var(--linha); }
   section { padding-top: 76px; scroll-margin-top: 20px; }
   h2 { font-weight: 300; font-size: clamp(20px, 3.4vw, 30px); letter-spacing: .2em; text-transform: uppercase; margin-bottom: 18px; }
   h2 span { color: var(--ouro); margin-right: .7em; }
@@ -43,15 +46,15 @@
   .visor.aberto .legenda { opacity: 1; }
   body.travado { overflow: hidden; }
   @media (prefers-reduced-motion: reduce) { .visor, .visor.aberto { transition: none; } }
-  @media (max-width: 760px) { .prints { grid-template-columns: repeat(2, 1fr); } .capa { padding-top: 48px; } section { padding-top: 56px; } }
+  @media (max-width: 760px) { .mosaico { grid-template-columns: repeat(4, 1fr); gap: 2px; padding: 0 4px 24px; } .mosaico span { display: none; } .prints { grid-template-columns: repeat(2, 1fr); } .capa { padding-top: 48px; } section { padding-top: 56px; } }
 </style>
 </head>
 <body>
 <header class="capa">
   <h1>Natal Alvorada 2026</h1>
-  <p>Projeção na tenda e na árvore de LED</p>
+  <p>Conteúdos audiorreativos para projeção na tenda e na árvore de LED</p>
 </header>
-<nav><ul id="menu"></ul></nav>
+<div class="mosaico" id="mosaico"></div>
 <main id="conteudos"></main>
 <footer>Natal Alvorada 2026</footer>
 
@@ -66,13 +69,15 @@
 <script>
 const CONTEUDOS = [
   ['A', 'Círculos', 'A_circulos'], ['B', 'Geométrico', 'B_geometrico'], ['C', 'Enfeites', 'C_esferas'], ['D', 'Mosaico', 'D_mosaico'],
-  ['E', 'Tropical', 'E_tropical'], ['F', 'Chita', 'F_chita'], ['G', 'Trama', 'G_trama'], ['H', 'Brasília', 'H_brasilia']
+  ['E', 'Tropical', 'E_tropical'], ['F', 'Chita', 'F_chita'], ['G', 'Trama', 'G_trama'], ['H', 'Brasília', 'H_brasilia'],
+  ['I', 'Estrela d’Alva', 'I_estrela_dalva'], ['J', 'Folia de Reis', 'J_folia_de_reis'], ['K', 'Modernista', 'K_modernista'], ['L', 'Revoada', 'L_revoada'],
+  ['M', 'Ciranda', 'M_ciranda'], ['N', 'Bandeirinhas', 'N_bandeirinhas'], ['O', 'Tropicália', 'O_tropicalia'], ['P', 'Águas', 'P_aguas']
 ];
 const fotos = [];
-const menu = document.getElementById('menu');
 const main = document.getElementById('conteudos');
+const mosaico = document.getElementById('mosaico');
 for (const [letra, nome, arq] of CONTEUDOS) {
-  menu.insertAdjacentHTML('beforeend', `<li><a href="#c${letra}">${letra} · ${nome}</a></li>`);
+  mosaico.insertAdjacentHTML('beforeend', `<a href="#c${letra}"><img src="imagens/mosaico/${arq}.jpg" alt="${nome}, tenda vista de baixo"><span>${nome}</span></a>`);
   let miniaturas = '';
   for (let cam = 1; cam <= 5; cam++) {
     const i = fotos.push({ src: `imagens/${arq}_CAM${cam}.jpg`, legenda: `${nome} · Câmera ${cam}` }) - 1;
